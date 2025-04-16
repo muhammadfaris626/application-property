@@ -80,6 +80,8 @@ use App\Livewire\Struktur\IndexStruktur;
 use App\Livewire\Struktur\ShowStruktur;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/', IndexDashboard::class)->name('home');
@@ -88,6 +90,16 @@ Route::middleware(['auth'])->group(function () {
     foreach (glob(__DIR__ . '/partials/*.php') as $file) {
         require $file;
     }
+
+    Route::get('/file/{folder}/{filename}', function ($folder, $filename) {
+        $path = storage_path('app/public/' . $folder . '/' . $filename);
+
+        if (!file_exists($path)) {
+            abort(404);
+        }
+
+        return Response::file($path);
+    });
 });
 
 require __DIR__.'/auth.php';
