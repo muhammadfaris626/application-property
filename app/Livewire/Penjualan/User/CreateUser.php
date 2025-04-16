@@ -74,7 +74,7 @@ class CreateUser extends Component
         }
 
         $this->validate([
-            'upload_berkas' => 'required|file|mimes:pdf|max:2048',
+            'upload_berkas' => 'file|mimes:pdf|max:2048',
         ], [
             'upload_berkas.required' => 'Kolom upload berkas wajib diisi.',
             'upload_berkas.mimes' => 'File berkas harus dalam format PDF.',
