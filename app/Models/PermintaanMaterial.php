@@ -13,10 +13,14 @@ class PermintaanMaterial extends Model
     /** @use HasFactory<\Database\Factories\PermintaanMaterialFactory> */
     use HasFactory;
 
-    protected $fillable = ['date', 'ro_number', 'employee_id'];
+    protected $fillable = ['date', 'ro_number', 'employee_id', 'area_id'];
 
     public function employee(): BelongsTo {
         return $this->belongsTo(Employee::class, 'employee_id');
+    }
+
+    public function area(): BelongsTo {
+        return $this->belongsTo(Area::class, 'area_id');
     }
 
     public function listPermintaanMaterials(): HasMany {

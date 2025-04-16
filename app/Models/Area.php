@@ -39,4 +39,8 @@ class Area extends Model
     public function approvalSteps(): HasMany {
         return $this->hasMany(ApprovalStep::class);
     }
+
+    public function permintaanMaterials(): HasMany {
+        return $this->hasMany(PermintaanMaterial::class);
+    }
 }

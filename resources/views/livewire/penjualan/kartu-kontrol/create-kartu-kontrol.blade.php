@@ -21,21 +21,20 @@
                                 wire:model="customer_id"
                                 variant="listbox"
                                 placeholder="Pilih User"
-                                :options="$fetchCustomer"
-                                wire:change="updatedCustomerId" />
-                            @if(!empty($customer_id))
-                            <div class="flex flex-col md:flex-row gap-6 justify-between md:items-center px-4">
-                                <div>
-                                    <flux:text class="text-xs">NIK</flux:text>
-                                    <flux:text class="text-xs">NAMA</flux:text>
-                                    <flux:text class="text-xs">ALAMAT</flux:text>
+                                :options="$fetchCustomer" />
+                            @if($userSelected)
+                                <div class="flex flex-col md:flex-row gap-6 justify-between md:items-center px-4">
+                                    <div>
+                                        <flux:text class="text-xs">NIK</flux:text>
+                                        <flux:text class="text-xs">NAMA</flux:text>
+                                        <flux:text class="text-xs">ALAMAT</flux:text>
+                                    </div>
+                                    <div class="text-right">
+                                        <flux:text class="text-xs">{{ $nik }}</flux:text>
+                                        <flux:text class="text-xs">{{ $nama }}</flux:text>
+                                        <flux:text class="text-xs">{{ $alamat }}</flux:text>
+                                    </div>
                                 </div>
-                                <div class="text-right">
-                                    <flux:text class="text-xs">{{ $nik }}</flux:text>
-                                    <flux:text class="text-xs">{{ $nama }}</flux:text>
-                                    <flux:text class="text-xs">{{ $alamat }}</flux:text>
-                                </div>
-                            </div>
                             @endif
                             <flux:error name="customer_id" />
                         </flux:field>

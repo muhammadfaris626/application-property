@@ -21,7 +21,8 @@ class CreateUser extends Component
     public $userSelected = false;
 
     public function mount() {
-        $this->fetchCalonUser = ProspectiveCustomer::get()
+        $existingProspectiveCustomerIds = Customer::pluck('prospective_customer_id')->toArray();
+        $this->fetchCalonUser = ProspectiveCustomer::whereNotIn('id', $existingProspectiveCustomerIds)->get()
             ->map(function($list) {
                 $obj = new \stdClass;
                 $obj->id = $list->id;

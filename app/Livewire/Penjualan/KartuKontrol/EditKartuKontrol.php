@@ -17,6 +17,7 @@ class EditKartuKontrol extends Component
     public $fetchCustomer;
     public $search = "";
     public $nik, $nama, $alamat;
+    public $userSelected = false;
 
     public function mount($id) {
         $this->kartuKontrolId = $id;
@@ -33,7 +34,13 @@ class EditKartuKontrol extends Component
         $this->listrik     = $data->listrik === 1 ? true : false;
         $this->bestek      = $data->bestek === 1 ? true : false;
 
-        $this->fetchCustomer = Customer::get()
+        $existingIds = KartuKontrol::pluck('customer_id')->toArray();
+        $dataLama = isset($this->kartuKontrolId) ? KartuKontrol::find($this->kartuKontrolId) : null;
+        $this->fetchCustomer = Customer::whereNotIn('id', $existingIds)
+            ->when($dataLama, function ($query) use ($dataLama) {
+                return $query->orWhere('id', $dataLama->customer_id);
+            })
+            ->get()
             ->map(function($list) {
                 $obj = new \stdClass;
                 $obj->id = $list->id;
@@ -50,7 +57,14 @@ class EditKartuKontrol extends Component
             $this->nik = $tampil->prospectiveCustomer->identification_number;
             $this->nama = $tampil->prospectiveCustomer->name;
             $this->alamat = $tampil->prospectiveCustomer->address;
+            $this->userSelected = true;
+        } else {
+            $this->nik = null;
+            $this->nama = null;
+            $this->alamat = null;
+            $this->userSelected = false;
         }
+
     }
 
     public function render()

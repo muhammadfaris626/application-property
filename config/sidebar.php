@@ -8,7 +8,9 @@ return [
                 'route'      => 'dashboard.index',
                 'routes'     => ['dashboard.index'],
                 'permission' => 'dashboard: menu',
-                'icon'       => 'home'
+                'icon'       => 'home',
+                'badge' => 'Pro',
+                'badge_color' => 'green',
             ],
             'Kehadiran' => [
                 'label'      => 'Kehadiran',

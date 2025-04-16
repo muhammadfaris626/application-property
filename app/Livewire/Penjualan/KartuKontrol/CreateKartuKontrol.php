@@ -16,9 +16,11 @@ class CreateKartuKontrol extends Component
     public $fetchCustomer;
     public $search = "", $action;
     public $nik, $nama, $alamat;
+    public $userSelected = false;
 
     public function mount() {
-        $this->fetchCustomer = Customer::get()
+        $existingIds = KartuKontrol::pluck('customer_id')->toArray();
+        $this->fetchCustomer = Customer::whereNotIn('id', $existingIds)->get()
             ->map(function($list) {
                 $obj = new \stdClass;
                 $obj->id = $list->id;
@@ -29,9 +31,18 @@ class CreateKartuKontrol extends Component
 
     public function updatedCustomerId() {
         $tampil = Customer::where('id', $this->customer_id)->first();
-        $this->nik = $tampil->prospectiveCustomer->identification_number;
-        $this->nama = $tampil->prospectiveCustomer->name;
-        $this->alamat = $tampil->prospectiveCustomer->address;
+        if ($tampil) {
+            $this->nik = $tampil->prospectiveCustomer->identification_number;
+            $this->nama = $tampil->prospectiveCustomer->name;
+            $this->alamat = $tampil->prospectiveCustomer->address;
+            $this->userSelected = true;
+        } else {
+            $this->nik = null;
+            $this->nama = null;
+            $this->alamat = null;
+            $this->userSelected = false;
+        }
+
     }
 
     public function setAction($action)

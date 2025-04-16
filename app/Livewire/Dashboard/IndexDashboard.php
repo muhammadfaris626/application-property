@@ -114,12 +114,22 @@ class IndexDashboard extends Component
     }
 
     public function totalCalonUser() {
-        return DB::table('prospective_customers')
+        $calonUser = DB::table('prospective_customers')
             ->when($this->area_id !== 'all', function ($query) {
                 $query->where('area_id', $this->area_id);
             })
             ->whereBetween('created_at', [$this->startDate, $this->endDate])
             ->count();
+
+        $user = DB::table('customers')
+            ->join('prospective_customers', 'customers.prospective_customer_id', '=', 'prospective_customers.id')
+            ->when($this->area_id !== 'all', function ($query) {
+                $query->where('prospective_customers.area_id', $this->area_id);
+            })
+            ->whereBetween('customers.created_at', [$this->startDate, $this->endDate])
+            ->count();
+
+        return $calonUser - $user;
     }
 
     public function totalUserSpr() {

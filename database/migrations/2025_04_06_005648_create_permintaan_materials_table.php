@@ -16,6 +16,7 @@ return new class extends Migration
             $table->date('date');
             $table->string('ro_number')->nullable();
             $table->foreignId('employee_id')->constrained('employees')->cascadeOnDelete();
+            $table->foreignId('area_id')->nullable()->constrained('areas')->cascadeOnDelete();
             $table->timestamps();
         });
     }

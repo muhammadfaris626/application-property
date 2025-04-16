@@ -68,6 +68,7 @@ class CreatePermintaanMaterial extends Component
             'date' => $this->date,
             'ro_number' => $format,
             'employee_id' => Auth::user()->employee_id,
+            'area_id' => Auth::user()->area_id,
         ]);
 
         for ($i=0; $i < count($this->allMaterials); $i++) {

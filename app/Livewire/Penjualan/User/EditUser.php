@@ -30,7 +30,13 @@ class EditUser extends Component
         $customer = Customer::findOrFail($id);
         Gate::authorize('update', $customer);
         $this->customer = $customer;
-        $this->fetchCalonUser = ProspectiveCustomer::get()
+        $existingProspectiveCustomerIds = Customer::pluck('prospective_customer_id')->toArray();
+        $dataLama = isset($this->id) ? Customer::find($this->id) : null;
+        $this->fetchCalonUser = ProspectiveCustomer::whereNotIn('id', $existingProspectiveCustomerIds)
+            ->when($dataLama, function ($query) use ($dataLama) {
+                return $query->orWhere('id', $dataLama->prospective_customer_id);
+            })
+            ->get()
             ->map(function($list) {
                 return (object)[
                     'id' => $list->id,

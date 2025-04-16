@@ -34,7 +34,6 @@ $groupMenus = $konfigurasi[$firstKey];
                 <flux:navlist.group :heading="$key" expandable :expanded="in_array(request()->route()->getName(), $allRoutes)">
                     @foreach($visibleMenus as $list)
                         <flux:navlist.item
-                            :icon="isset($list['icon']) ? $list['icon'] : 'rectangle-group'"
                             :href="route($list['route'])"
                             :current="in_array(request()->route()->getName(), $list['routes'] ?? [])"
                             wire:navigate>
