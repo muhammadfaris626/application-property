@@ -1,8 +1,10 @@
 /.phpunit.cache
 /public/hot
 /public/storage
+/public/index.php
 /storage/*.key
 /storage/pail
+
 .env
 .env.backup
 .env.production
