@@ -57,7 +57,7 @@
                 </div>
             </div>
 
-            <flux:custom.confirm-create :route="route('pembelian-material.index')" />
+            <flux:custom.confirm-create :route="route('permintaan-material.index')" />
         </form>
     </div>
 </app>
