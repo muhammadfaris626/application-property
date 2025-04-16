@@ -16,35 +16,35 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             // Dummy Data
-            // AreaSeeder::class,
-            // PositionSeeder::class,
-            // EmployeeSeeder::class,
-            // MaterialCategorySeeder::class,
-            // TypeOfExpenditureSeeder::class,
-            // TypeOfIncomeSeeder::class,
-            // StructureSeeder::class,
-            // UserSeeder::class,
-            // MaterialSeeder::class,
-            // SupplierSeeder::class,
-            // TypeOfHouseSeeder::class,
-            // PurchaseOfMaterialSeeder::class,
-            // KasBesarSeeder::class,
-            // KasKecilSeeder::class,
-            // ProspectiveCustomerSeeder::class,
-            // CustomerSeeder::class,
-            // KartuKontrolSeeder::class,
-            // PendapatanSeeder::class,
-            // RoleSeeder::class,
-            // PermissionSeeder::class,
-            // AllSeeder::class,
-            // ApprovalFlowSeeder::class,
-            // ApprovalStepSeeder::class,
-            // PermintaanMaterialSeeder::class
-
-
-            AllDataSeeder::class,
+            AreaSeeder::class,
+            PositionSeeder::class,
+            EmployeeSeeder::class,
+            MaterialCategorySeeder::class,
+            TypeOfExpenditureSeeder::class,
+            TypeOfIncomeSeeder::class,
+            StructureSeeder::class,
+            UserSeeder::class,
+            MaterialSeeder::class,
+            SupplierSeeder::class,
+            TypeOfHouseSeeder::class,
+            PurchaseOfMaterialSeeder::class,
+            KasBesarSeeder::class,
+            KasKecilSeeder::class,
+            ProspectiveCustomerSeeder::class,
+            CustomerSeeder::class,
+            KartuKontrolSeeder::class,
+            PendapatanSeeder::class,
             RoleSeeder::class,
-            PermissionSeeder::class
+            PermissionSeeder::class,
+            AllSeeder::class,
+            ApprovalFlowSeeder::class,
+            ApprovalStepSeeder::class,
+            PermintaanMaterialSeeder::class
+
+
+            // AllDataSeeder::class,
+            // RoleSeeder::class,
+            // PermissionSeeder::class
 
         ]);
     }

@@ -66,7 +66,7 @@ class IndexKehadiran extends Component
         ]);
 
         session()->flash('success', 'Berhasil absen masuk.');
-        return to_route('kehadiran');
+        return to_route('kehadiran.index');
     }
 
     public function absenKeluar()
@@ -81,7 +81,7 @@ class IndexKehadiran extends Component
         ]);
 
         session()->flash('success', 'Berhasil absen keluar.');
-        return to_route('kehadiran');
+        return to_route('kehadiran.index');
     }
 
     public function filterData()
