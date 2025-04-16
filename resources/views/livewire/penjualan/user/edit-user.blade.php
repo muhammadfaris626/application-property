@@ -86,7 +86,7 @@
                     <div>
                         <flux:input type="file" wire:model="upload_berkas" label="Upload Berkas Baru (opsional)" />
                         @if ($upload_berkas_preview)
-                            <div class="mt-2 text-sm text-gray-500">File saat ini: <a href="{{ asset('storage/' . $upload_berkas_preview) }}" target="_blank" class="underline text-blue-600">Lihat File</a></div>
+                            <div class="mt-2 text-sm text-gray-500">File saat ini: <a href="{{ asset('file/' . $upload_berkas_preview) }}" target="_blank" class="underline text-blue-600">Lihat File</a></div>
                         @endif
                     </div>
                 </div>

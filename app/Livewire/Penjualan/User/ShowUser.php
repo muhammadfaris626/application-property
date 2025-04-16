@@ -37,6 +37,7 @@ class ShowUser extends Component
                     'type_of_house_id' => "AREA : " . $list->typeOfHouse->area->name . " \n JENIS RUMAH : " . $list->typeOfHouse->name,
                     'verifikasi_dp' => $list->verifikasi_dp == 1 ? 'Terverifikasi' : 'Belum diverifikasi',
                     'employee_id' => $list->employee->name,
+                    'upload_berkas' => 'file/' . $list->upload_berkas,
                     default => $value ?? '-',
                 }
             ];
