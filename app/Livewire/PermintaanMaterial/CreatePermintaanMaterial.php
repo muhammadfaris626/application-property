@@ -3,9 +3,15 @@
 namespace App\Livewire\PermintaanMaterial;
 
 use App\Http\Requests\PermintaanMaterialRequest;
+use App\Models\ApprovalFlow;
+use App\Models\ApprovalStep;
 use App\Models\ListPermintaanMaterial;
 use App\Models\Material;
 use App\Models\PermintaanMaterial;
+use App\Models\Position;
+use App\Models\Structure;
+use App\Models\User;
+use App\Notifications\PermintaanMaterialNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
@@ -78,6 +84,14 @@ class CreatePermintaanMaterial extends Component
                 'quantity' => $this->allMaterials[$i]['quantity']
             ]);
         }
+
+        $flow = ApprovalFlow::where('model_type', 'App\Models\PermintaanMaterial')->first();
+        $step = ApprovalStep::where('approval_flow_id', $flow->id)->where('step', 1)->first();
+
+        $jabatan = Position::where('id', $step->position_id)->first();
+        $struktur = Structure::where('position_id', $jabatan->id)->first();
+        $penerima = User::where('employee_id', $struktur->employee_id)->first();
+        $penerima->notify(new PermintaanMaterialNotification($create));
 
         $this->dispatch('resetDropdown');
         $this->reset(['date', 'ro_number', 'allMaterials']);

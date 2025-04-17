@@ -3,8 +3,14 @@
 namespace App\Livewire\Pengeluaran\PengajuanInvoice;
 
 use App\Http\Requests\PengajuanInvoiceRequest;
+use App\Models\ApprovalFlow;
+use App\Models\ApprovalStep;
 use App\Models\Employee;
 use App\Models\PengajuanInvoice;
+use App\Models\Position;
+use App\Models\Structure;
+use App\Models\User;
+use App\Notifications\PengajuanInvoiceNotification;
 use Illuminate\Support\Facades\Gate;
 use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 use Livewire\Component;
@@ -33,12 +39,21 @@ class CreatePengajuanInvoice extends Component
     public function store() {
         $request = new PengajuanInvoiceRequest();
         $this->validate($request->rules(), $request->messages());
-        PengajuanInvoice::create([
+        $create = PengajuanInvoice::create([
             'date' => $this->date,
             'employee_id' => $this->employee_id,
             'price' => str_replace('.', '', $this->price),
             'desc' => $this->desc
         ]);
+
+        $flow = ApprovalFlow::where('model_type', 'App\Models\PengajuanInvoice')->first();
+        $step = ApprovalStep::where('approval_flow_id', $flow->id)->where('step', 1)->first();
+
+        $jabatan = Position::where('id', $step->position_id)->first();
+        $struktur = Structure::where('position_id', $jabatan->id)->first();
+        $penerima = User::where('employee_id', $struktur->employee_id)->first();
+        $penerima->notify(new PengajuanInvoiceNotification($create));
+
         $this->dispatch('resetDropdown');
         $this->reset(['date', 'employee_id', 'price', 'desc']);
         if ($this->action === 'save_and_add') {

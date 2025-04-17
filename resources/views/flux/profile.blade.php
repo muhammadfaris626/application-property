@@ -32,7 +32,6 @@ $classes = Flux::classes()
     ->add('p-1 hover:bg-zinc-800/5 dark:hover:bg-white/10')
     ;
 @endphp
-
 <button type="button" {{ $attributes->class($classes) }} data-flux-profile>
     <div class="shrink-0">
         <?php if ($avatar instanceof \Illuminate\View\ComponentSlot): ?>

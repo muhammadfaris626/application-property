@@ -6,6 +6,10 @@ use App\Models\ApprovalHistory;
 use App\Models\ApprovalStep;
 use App\Models\ListPermintaanMaterial;
 use App\Models\PermintaanMaterial;
+use App\Models\Position;
+use App\Models\Structure;
+use App\Models\User;
+use App\Notifications\PermintaanMaterialNotification;
 use Livewire\Component;
 
 class ApprovalPermintaanMaterial extends Component
@@ -40,6 +44,7 @@ class ApprovalPermintaanMaterial extends Component
     }
 
     public function persetujuan() {
+
         $approval = ApprovalHistory::where('approvable_id', $this->id)->where('approvable_type', 'App\Models\PermintaanMaterial')->where('status', 1)->first();
         $typeAgreement = $approval->approvalStep->type_of_agreement;
         if ($typeAgreement == 'Pemeriksa') {
@@ -65,6 +70,11 @@ class ApprovalPermintaanMaterial extends Component
             $nextApproval->update([
                 'status' => 1
             ]);
+
+            $struktur = Structure::where('employee_id', $nextApproval->approved_by)->first();
+            $penerima = User::where('employee_id', $struktur->employee_id)->first();
+            $create = PermintaanMaterial::where('id', $nextApproval->approvable_id)->first();
+            $penerima->notify(new PermintaanMaterialNotification($create));
         }
 
         session()->flash('success', 'Permintaan telah disetujui.');

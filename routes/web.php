@@ -78,6 +78,7 @@ use App\Livewire\Struktur\CreateStruktur;
 use App\Livewire\Struktur\EditStruktur;
 use App\Livewire\Struktur\IndexStruktur;
 use App\Livewire\Struktur\ShowStruktur;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 use Illuminate\Support\Facades\Response;
@@ -100,6 +101,13 @@ Route::middleware(['auth'])->group(function () {
 
         return Response::file($path);
     });
+
+    Route::get('/redirect-notification/{id}', function($id) {
+        $notification = Auth::user()->notifications->findOrFail($id);
+        $notification->markAsRead();
+        $url = $notification->data['url'];
+        return redirect($url);
+    })->name('notification.redirect');
 });
 
 require __DIR__.'/auth.php';

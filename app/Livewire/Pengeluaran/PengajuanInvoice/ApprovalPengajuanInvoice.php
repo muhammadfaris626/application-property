@@ -5,6 +5,9 @@ namespace App\Livewire\Pengeluaran\PengajuanInvoice;
 use App\Models\ApprovalHistory;
 use App\Models\ApprovalStep;
 use App\Models\PengajuanInvoice;
+use App\Models\Structure;
+use App\Models\User;
+use App\Notifications\PengajuanInvoiceNotification;
 use Livewire\Component;
 
 class ApprovalPengajuanInvoice extends Component
@@ -47,6 +50,10 @@ class ApprovalPengajuanInvoice extends Component
             $nextApproval->update([
                 'status' => 1
             ]);
+            $struktur = Structure::where('employee_id', $nextApproval->approved_by)->first();
+            $penerima = User::where('employee_id', $struktur->employee_id)->first();
+            $create = PengajuanInvoice::where('id', $nextApproval->approvable_id)->first();
+            $penerima->notify(new PengajuanInvoiceNotification($create));
         }
         session()->flash('success', 'Permintaan telah disetujui.');
         return to_route('pengajuan-invoice.index');
