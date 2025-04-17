@@ -10,9 +10,13 @@ class Absensi extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['employee_id', 'date', 'check_in', 'check_out'];
+    protected $fillable = ['employee_id', 'area_id', 'date', 'check_in', 'check_out'];
 
     public function employee(): BelongsTo {
         return $this->belongsTo(Employee::class, 'employee_id');
+    }
+
+    public function area(): BelongsTo {
+        return $this->belongsTo(Area::class, 'area_id');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Laporan\PengajuanInvoice;
 
+use App\Models\Area;
 use App\Models\PengajuanInvoice;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -15,10 +16,14 @@ class LaporanPengajuanInvoiceIndex extends Component
     public $search = "";
     public $startDate;
     public $endDate;
+    public $area_id;
+    public $areas;
 
     public function mount() {
         $this->startDate = now()->startOfYear()->toDateString();
         $this->endDate = now()->endOfYear()->toDateString();
+        $this->area_id = 'all';
+        $this->areas = Area::all();
     }
 
     public function render()
@@ -42,21 +47,33 @@ class LaporanPengajuanInvoiceIndex extends Component
 
     public function totalBiayaPengajuan() {
         return DB::table('pengajuan_invoices')
+            ->when($this->area_id !== 'all', function ($query) {
+                $query->where('pengajuan_invoices.area_id', $this->area_id);
+            })
             ->whereBetween('created_at', [$this->startDate, $this->endDate])
             ->sum('price') ?? 0;
     }
 
     public function totalDisetujui() {
         return DB::table('pengajuan_invoices')
+            ->when($this->area_id !== 'all', function ($query) {
+                $query->where('pengajuan_invoices.area_id', $this->area_id);
+            })
             ->whereBetween('created_at', [$this->startDate, $this->endDate])
             ->sum('approved_price') ?? 0;
     }
 
     public function totalTidakDisetujui() {
         $pengajuan = DB::table('pengajuan_invoices')
+            ->when($this->area_id !== 'all', function ($query) {
+                $query->where('pengajuan_invoices.area_id', $this->area_id);
+            })
             ->whereBetween('created_at', [$this->startDate, $this->endDate])
             ->sum('price') ?? 0;
         $disetujui = DB::table('pengajuan_invoices')
+            ->when($this->area_id !== 'all', function ($query) {
+                $query->where('pengajuan_invoices.area_id', $this->area_id);
+            })
             ->whereBetween('created_at', [$this->startDate, $this->endDate])
             ->sum('approved_price') ?? 0;
         return $pengajuan - $disetujui;
@@ -90,6 +107,9 @@ class LaporanPengajuanInvoiceIndex extends Component
 
     public function fetchData() {
         $data = PengajuanInvoice::latest()
+            ->when($this->area_id !== 'all', function ($query) {
+                $query->where('pengajuan_invoices.area_id', $this->area_id);
+            })
             ->whereBetween('created_at', [$this->startDate, $this->endDate])
             ->paginate(20);
         return $data;

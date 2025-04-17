@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Laporan\Pendapatan;
 
+use App\Models\Area;
 use App\Models\Pendapatan;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -15,10 +16,14 @@ class IndexLaporanPendapatan extends Component
     public $search = "";
     public $startDate;
     public $endDate;
+    public $area_id;
+    public $areas;
 
     public function mount() {
         $this->startDate = now()->startOfYear()->toDateString();
         $this->endDate = now()->endOfYear()->toDateString();
+        $this->area_id = 'all';
+        $this->areas = Area::all();
     }
 
     public function render()
@@ -40,6 +45,9 @@ class IndexLaporanPendapatan extends Component
 
     public function totalPendapatan() {
         return DB::table('pendapatans')
+            ->when($this->area_id !== 'all', function ($query) {
+                $query->where('pendapatans.area_id', $this->area_id);
+            })
             ->whereBetween('created_at', [$this->startDate, $this->endDate])
             ->sum('total') ?? 0;
     }
@@ -73,6 +81,9 @@ class IndexLaporanPendapatan extends Component
 
     public function fetchData() {
         $data = Pendapatan::latest()
+            ->when($this->area_id !== 'all', function ($query) {
+                $query->where('pendapatans.area_id', $this->area_id);
+            })
             ->whereBetween('created_at', [$this->startDate, $this->endDate])
             ->paginate(20);
         return $data;

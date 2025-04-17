@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Laporan\DataJaminanUser;
 
+use App\Models\Area;
 use App\Models\KartuKontrol;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -15,10 +16,14 @@ class LaporanDataJaminanUserIndex extends Component
     public $search = "";
     public $startDate;
     public $endDate;
+    public $area_id;
+    public $areas;
 
     public function mount() {
         $this->startDate = now()->startOfYear()->toDateString();
         $this->endDate = now()->endOfYear()->toDateString();
+        $this->area_id = 'all';
+        $this->areas = Area::all();
     }
 
     public function render()
@@ -43,12 +48,18 @@ class LaporanDataJaminanUserIndex extends Component
 
     public function totalDajamUser() {
         return DB::table('kartu_kontrols')
+            ->when($this->area_id !== 'all', function ($query) {
+                $query->where('kartu_kontrols.area_id', $this->area_id);
+            })
             ->whereBetween('kartu_kontrols.created_at', [$this->startDate, $this->endDate])
             ->count();
     }
 
     public function totalTerverifikasi() {
         return DB::table('kartu_kontrols')
+            ->when($this->area_id !== 'all', function ($query) {
+                $query->where('kartu_kontrols.area_id', $this->area_id);
+            })
             ->whereBetween('kartu_kontrols.created_at', [$this->startDate, $this->endDate])
             ->where('sbum', 1)
             ->where('dp', 1)
@@ -62,6 +73,9 @@ class LaporanDataJaminanUserIndex extends Component
 
     public function totalBelumTerverifikasi() {
         return DB::table('kartu_kontrols')
+            ->when($this->area_id !== 'all', function ($query) {
+                $query->where('kartu_kontrols.area_id', $this->area_id);
+            })
             ->whereBetween('created_at', [$this->startDate, $this->endDate])
             ->where(function ($query) {
                 $query->whereNull('sbum')->orWhere('sbum', '!=', 1)
@@ -140,6 +154,9 @@ class LaporanDataJaminanUserIndex extends Component
 
     public function fetchData() {
         $data = KartuKontrol::latest()
+            ->when($this->area_id !== 'all', function ($query) {
+                $query->where('kartu_kontrols.area_id', $this->area_id);
+            })
             ->whereBetween('created_at', [$this->startDate, $this->endDate])
             ->paginate(20);
         return $data;

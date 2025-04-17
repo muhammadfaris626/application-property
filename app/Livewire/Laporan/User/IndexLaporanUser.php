@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Laporan\User;
 
+use App\Models\Area;
 use App\Models\Customer;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -15,11 +16,15 @@ class IndexLaporanUser extends Component
     public $startDate;
     public $endDate;
     public $categoryYears;
+    public $area_id;
+    public $areas;
 
     public function mount() {
         $this->startDate = now()->startOfYear()->toDateString();
         $this->endDate = now()->endOfYear()->toDateString();
         $this->categoryYears = range(date('Y') - 2, date('Y'));
+        $this->area_id = 'all';
+        $this->areas = Area::all();
     }
 
     public function render()
@@ -44,12 +49,18 @@ class IndexLaporanUser extends Component
 
     public function totalUser() {
         return DB::table('customers')
+            ->when($this->area_id !== 'all', function ($query) {
+                $query->where('customers.area_id', $this->area_id);
+            })
             ->whereBetween('customers.created_at', [$this->startDate, $this->endDate])
             ->count();
     }
 
     public function totalKredit() {
         return DB::table('customers')
+            ->when($this->area_id !== 'all', function ($query) {
+                $query->where('customers.area_id', $this->area_id);
+            })
             ->where('customers.status_penjualan', 'LIKE', '%' . 'KREDIT' . '%')
             ->whereBetween('customers.created_at', [$this->startDate, $this->endDate])
             ->count();
@@ -57,6 +68,9 @@ class IndexLaporanUser extends Component
 
     public function totalCash() {
         return DB::table('customers')
+            ->when($this->area_id !== 'all', function ($query) {
+                $query->where('customers.area_id', $this->area_id);
+            })
             ->where('customers.status_penjualan', 'LIKE', '%' . 'CASH' . '%')
             ->whereBetween('customers.created_at', [$this->startDate, $this->endDate])
             ->count();
@@ -137,6 +151,9 @@ class IndexLaporanUser extends Component
 
     public function fetchData() {
         return Customer::latest()
+            ->when($this->area_id !== 'all', function ($query) {
+                $query->where('customers.area_id', $this->area_id);
+            })
             ->whereBetween('created_at', [$this->startDate, $this->endDate])
             ->paginate(20);
     }

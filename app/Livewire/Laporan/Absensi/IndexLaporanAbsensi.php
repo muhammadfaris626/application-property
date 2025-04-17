@@ -3,6 +3,7 @@
 namespace App\Livewire\Laporan\Absensi;
 
 use App\Models\Absensi;
+use App\Models\Area;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -11,10 +12,14 @@ class IndexLaporanAbsensi extends Component
     public $startDate;
     public $endDate;
     public $filterClicked = false;
+    public $area_id;
+    public $areas;
 
     public function mount() {
         $this->startDate = now()->startOfYear()->toDateString();
         $this->endDate = now()->endOfYear()->toDateString();
+        $this->area_id = 'all';
+        $this->areas = Area::all();
     }
 
     public function render()
@@ -44,6 +49,9 @@ class IndexLaporanAbsensi extends Component
             'areas.name as area_name',
             DB::raw('COUNT(*) as total_absensi')
         )
+        ->when($this->area_id !== 'all', function ($query) {
+            $query->where('absensis.area_id', $this->area_id);
+        })
         ->join('employees', 'absensis.employee_id', '=', 'employees.id')
         ->join('structures', 'absensis.employee_id', '=', 'structures.employee_id')
         ->join('areas', 'structures.area_id', '=', 'areas.id')
@@ -64,6 +72,9 @@ class IndexLaporanAbsensi extends Component
             'areas.name as area_name',
             DB::raw('COUNT(*) as total_absensi')
         )
+        ->when($this->area_id !== 'all', function ($query) {
+            $query->where('absensis.area_id', $this->area_id);
+        })
         ->join('employees', 'absensis.employee_id', '=', 'employees.id')
         ->join('structures', 'absensis.employee_id', '=', 'structures.employee_id')
         ->join('areas', 'structures.area_id', '=', 'areas.id')
@@ -84,6 +95,9 @@ class IndexLaporanAbsensi extends Component
             'absensis.check_in',
             'absensis.check_out'
         )
+        ->when($this->area_id !== 'all', function ($query) {
+            $query->where('absensis.area_id', $this->area_id);
+        })
         ->join('employees', 'absensis.employee_id', '=', 'employees.id')
         ->join('structures', 'absensis.employee_id', '=', 'structures.employee_id')
         ->join('areas', 'structures.area_id', '=', 'areas.id')

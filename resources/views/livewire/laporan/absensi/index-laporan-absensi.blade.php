@@ -6,6 +6,12 @@
             <flux:breadcrumbs.item divider="slash">Absensi</flux:breadcrumbs.item>
         </flux:breadcrumbs>
         <div class="flex flex-col md:flex-row gap-4">
+            <flux:select size="sm" wire:model="area_id" placeholder="Pilih Area">
+                <flux:select.option value="all">Semua Area</flux:select.option>
+                @foreach($areas as $key => $value)
+                    <flux:select.option value="{{ $value->id }}">{{ $value->name }}</flux:select.option>
+                @endforeach
+            </flux:select>
             <flux:input type="date" size="sm" x-data x-ref="datepicker1" @click="$refs.datepicker1.showPicker()" wire:model="startDate" />
             <flux:input type="date" size="sm" x-data x-ref="datepicker2" @click="$refs.datepicker2.showPicker()" wire:model="endDate" />
             <flux:button variant="primary" size="sm" wire:click="applyFilter">Filter</flux:button>
