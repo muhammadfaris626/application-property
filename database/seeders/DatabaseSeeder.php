@@ -39,7 +39,8 @@ class DatabaseSeeder extends Seeder
             AllSeeder::class,
             ApprovalFlowSeeder::class,
             ApprovalStepSeeder::class,
-            PermintaanMaterialSeeder::class
+            PermintaanMaterialSeeder::class,
+            AbsensiSeeder::class
 
 
             // AllDataSeeder::class,

@@ -26,6 +26,8 @@ class LaporanPengajuanInvoiceIndex extends Component
         Gate::authorize('viewAny', PengajuanInvoice::class);
         return view('livewire.laporan.pengajuan-invoice.laporan-pengajuan-invoice-index', [
             'totalBiayaPengajuan' => $this->totalBiayaPengajuan(),
+            'totalDisetujui' => $this->totalDisetujui(),
+            'totalTidakDisetujui' => $this->totalTidakDisetujui(),
             'columnChartPengajuan' => $this->columnChartPengajuan(),
             'fetchData' => $this->fetchData()
         ]);
@@ -41,7 +43,23 @@ class LaporanPengajuanInvoiceIndex extends Component
     public function totalBiayaPengajuan() {
         return DB::table('pengajuan_invoices')
             ->whereBetween('created_at', [$this->startDate, $this->endDate])
+            ->sum('price') ?? 0;
+    }
+
+    public function totalDisetujui() {
+        return DB::table('pengajuan_invoices')
+            ->whereBetween('created_at', [$this->startDate, $this->endDate])
             ->sum('approved_price') ?? 0;
+    }
+
+    public function totalTidakDisetujui() {
+        $pengajuan = DB::table('pengajuan_invoices')
+            ->whereBetween('created_at', [$this->startDate, $this->endDate])
+            ->sum('price') ?? 0;
+        $disetujui = DB::table('pengajuan_invoices')
+            ->whereBetween('created_at', [$this->startDate, $this->endDate])
+            ->sum('approved_price') ?? 0;
+        return $pengajuan - $disetujui;
     }
 
     public function columnChartPengajuan() {

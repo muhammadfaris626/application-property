@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\ApprovalFlow;
+use App\Models\ApprovalHistory;
 use App\Models\ApprovalStep;
 use App\Models\PengajuanInvoice;
 use App\Models\Structure;
@@ -17,6 +18,17 @@ class PengajuanInvoiceObserver
         $checkApprovalFlow = ApprovalFlow::where('model_type', 'App\Models\PengajuanInvoice')->first();
         $approvalSteps = ApprovalStep::where('approval_flow_id', $checkApprovalFlow->id)->orderBy('step', 'asc')->get();
         foreach ($approvalSteps as $key => $value) {
+            if ($value->step == 1) {
+                if ($value->type_of_agreement == 'Pemeriksa') {
+                    $pengajuanInvoice->update([
+                        'status' => 'Pemeriksaan'
+                    ]);
+                } elseif ($value->type_of_agreement == 'Pemberi Persetujuan') {
+                    $pengajuanInvoice->update([
+                        'status' => 'Persetujuan'
+                    ]);
+                }
+            }
             $status = ($value->step == 1) ? 1 : 0;
             $checkEmployee = Structure::where('area_id', $value->area_id)->where('position_id', $value->position_id)->first();
             $pengajuanInvoice->approvalHistories()->create([

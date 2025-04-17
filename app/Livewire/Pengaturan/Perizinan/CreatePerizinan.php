@@ -31,7 +31,7 @@ class CreatePerizinan extends Component
         ]);
         $this->reset(['name']);
         if ($this->action === 'save_and_add') {
-            $this->loadAvailableModels();
+            // $this->loadAvailableModels();
             LivewireAlert::text('Data berhasil ditambahkan.')->success()->toast()->position('top-end')->show();
             return back();
         } else {

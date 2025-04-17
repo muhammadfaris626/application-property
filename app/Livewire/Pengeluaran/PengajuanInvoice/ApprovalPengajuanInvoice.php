@@ -32,7 +32,8 @@ class ApprovalPengajuanInvoice extends Component
             ]);
             $update = PengajuanInvoice::find($this->id);
             $update->update([
-                'approved_price' => str_replace('.', '', $this->approved_price)
+                'approved_price' => str_replace('.', '', $this->approved_price),
+                'status' => 'Persetujuan'
             ]);
         }
         $step = $approval->approvalStep->step;

@@ -16,8 +16,16 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div class="md:col-span-1 flex flex-col gap-4">
                 <div class="relative rounded-lg p-6 bg-zinc-50 dark:bg-zinc-700">
-                    <flux:subheading>Total Biaya Pengajuan</flux:subheading>
+                    <flux:subheading>Total Pengajuan</flux:subheading>
                     <flux:heading size="xl">Rp {{ number_format($totalBiayaPengajuan, 0, ',', '.') }}</flux:heading>
+                </div>
+                <div class="relative rounded-lg p-6 bg-zinc-50 dark:bg-zinc-700">
+                    <flux:subheading>Total Disetujui</flux:subheading>
+                    <flux:heading size="xl">Rp {{ number_format($totalDisetujui, 0, ',', '.') }}</flux:heading>
+                </div>
+                <div class="relative rounded-lg p-6 bg-zinc-50 dark:bg-zinc-700">
+                    <flux:subheading>Total Tidak Disetujui</flux:subheading>
+                    <flux:heading size="xl">Rp {{ number_format($totalTidakDisetujui, 0, ',', '.') }}</flux:heading>
                 </div>
             </div>
             <div class="md:col-span-2 flex flex-col gap-4">

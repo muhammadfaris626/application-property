@@ -5,8 +5,11 @@
             <flux:breadcrumbs.item href="#" divider="slash">Karyawan</flux:breadcrumbs.item>
             <flux:breadcrumbs.item divider="slash">Absensi</flux:breadcrumbs.item>
         </flux:breadcrumbs>
-        <div class="flex gap-4">
+        <div class="flex flex-col md:flex-row gap-4">
             <flux:input icon="magnifying-glass" placeholder="Pencarian..." size="sm" wire:model.live="search" />
+            <flux:input type="date" size="sm" x-data x-ref="datepicker1" @click="$refs.datepicker1.showPicker()" wire:model="startDate" />
+            <flux:input type="date" size="sm" x-data x-ref="datepicker2" @click="$refs.datepicker2.showPicker()" wire:model="endDate" />
+            <flux:button variant="primary" size="sm" wire:click="filterData">Filter</flux:button>
             <flux:custom.button-create-permission :routeName="'absensi'" />
         </div>
     </div>
@@ -37,5 +40,6 @@
                 @endforeach
             </x-table-body>
         </x-table>
+        <flux:pagination :paginator="$fetch" />
     </div>
 </app>

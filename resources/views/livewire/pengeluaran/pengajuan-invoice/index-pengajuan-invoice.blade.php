@@ -5,8 +5,13 @@
             <flux:breadcrumbs.item href="#" divider="slash">Pengeluaran</flux:breadcrumbs.item>
             <flux:breadcrumbs.item divider="slash">Pengajuan Invoice</flux:breadcrumbs.item>
         </flux:breadcrumbs>
-        <div class="flex gap-4">
+        <div class="flex flex-col md:flex-row gap-4">
             <flux:input icon="magnifying-glass" placeholder="Pencarian..." size="sm" wire:model.live="search" />
+            <flux:select size="sm" wire:model.live="filterStatus" placeholder="Pilih Status">
+                <flux:select.option value="all">Semua Status</flux:select.option>
+                <flux:select.option value="Pemeriksaan">Pemeriksaan</flux:select.option>
+                <flux:select.option value="Persetujuan">Persetujuan</flux:select.option>
+            </flux:select>
             <flux:custom.button-create-permission :routeName="'pengajuan-invoice'" />
         </div>
     </div>

@@ -37,6 +37,7 @@ class ShowPeran extends Component
             'pengajuan-invoice', 'pengeluaran-kas-besar', 'pengeluaran-kas-kecil',
             // Management
             'laporan-pembelian-material', 'laporan-kas-besar', 'laporan-kas-kecil', 'laporan-pengajuan-invoice', 'laporan-permintaan-material', 'laporan-data-jaminan-user', 'laporan-penjualan-user', 'laporan-pendapatan',
+            'laporan-absensi',
             'absensi', 'kinerja', 'profil', 'mutasi', 'pemberhentian',
             'struktur',
             // Database
@@ -71,6 +72,7 @@ class ShowPeran extends Component
             'laporan-data-jaminan-user' => 'LAPORAN DATA JAMINAN USER',
             'laporan-penjualan-user' => 'LAPORAN PENJUALAN USER',
             'laporan-pendapatan' => 'LAPORAN PENDAPATAN',
+            'laporan-absensi' => 'LAPORAN ABSENSI',
             'absensi' => 'ABSENSI',
             'kinerja' => 'KINERJA',
             'profil' => 'PROFIL',

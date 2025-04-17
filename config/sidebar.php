@@ -175,6 +175,13 @@ return [
                     'permission' => 'laporan-pendapatan: menu',
                     'icon'       => 'clipboard-document-list'
                 ],
+                [
+                    'label'      => 'Absensi',
+                    'route'      => 'laporan-absensi.index',
+                    'routes'     => ['laporan-absensi.index'],
+                    'permission' => 'laporan-absensi: menu',
+                    'icon'       => 'clipboard-document-list'
+                ],
             ],
             'Karyawan' => [
                 [

@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Laporan\Absensi\IndexLaporanAbsensi;
 use App\Livewire\Laporan\DataJaminanUser\LaporanDataJaminanUserIndex;
 use App\Livewire\Laporan\KasBesar\LaporanKasBesarIndex;
 use App\Livewire\Laporan\KasKecil\LaporanKasKecilIndex;
@@ -38,6 +39,10 @@ Route::prefix('laporan')->group(function() {
 
     Route::prefix('laporan-penjualan-user')->name('laporan-penjualan-user.')->group(function() {
         Route::get('/', IndexLaporanUser::class)->name('index');
+    });
+
+    Route::prefix('laporan-absensi')->name('laporan-absensi.')->group(function() {
+        Route::get('/', IndexLaporanAbsensi::class)->name('index');
     });
 
     // Route::prefix('')->name('.')->group(function() {

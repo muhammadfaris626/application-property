@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('price');
             $table->text('desc');
             $table->unsignedBigInteger('approved_price')->nullable();
+            $table->string('status')->nullable();
             $table->timestamps();
         });
     }

@@ -32,7 +32,7 @@ class PermissionSeeder extends Seeder
             'pengajuan-invoice', 'pengeluaran-kas-besar', 'pengeluaran-kas-kecil',
             // Management => Laporan
             'laporan-pembelian-material', 'laporan-kas-besar', 'laporan-kas-kecil', 'laporan-pengajuan-invoice', 'laporan-permintaan-material',
-            'laporan-data-jaminan-user', 'laporan-penjualan-user', 'laporan-pendapatan',
+            'laporan-data-jaminan-user', 'laporan-penjualan-user', 'laporan-pendapatan', 'laporan-absensi',
             // Management => Karyawan
             'absensi', 'kinerja', 'profil', 'mutasi', 'pemberhentian',
             // Management => Struktur Management
@@ -58,10 +58,12 @@ class PermissionSeeder extends Seeder
 
             ])->get(),
             'kepala logistik' => Permission::whereIn('name', [
-                'permintaan-material: menu'
+                'permintaan-material: menu', 'permintaan-material: create', 'permintaan-material: update', 'permintaan-material: read',
+                'pengajuan-invoice: menu', 'pengajuan-invoice: create', 'pengajuan-invoice: update', 'pengajuan-invoice: read'
             ])->get(),
             'admin logistik' => Permission::whereIn('name', [
-                'permintaan-material: menu', 'permintaan-material: create', 'permintaan-material: update', 'permintaan-material: read'
+                'permintaan-material: menu', 'permintaan-material: create', 'permintaan-material: update', 'permintaan-material: read',
+                'pengajuan-invoice: menu', 'pengajuan-invoice: create', 'pengajuan-invoice: update', 'pengajuan-invoice: read'
             ])->get(),
         ];
 

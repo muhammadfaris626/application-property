@@ -29,6 +29,10 @@
                     <flux:subheading>Total Pengeluaran</flux:subheading>
                     <flux:heading size="lg">Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}</flux:heading>
                 </div>
+                <div class="relative rounded-lg p-4 bg-zinc-50 dark:bg-zinc-700">
+                    <flux:subheading>Sisa Kas</flux:subheading>
+                    <flux:heading size="lg">Rp {{ number_format($totalPemasukan - $totalPengeluaran, 0, ',', '.') }}</flux:heading>
+                </div>
             </div>
             <div class="md:col-span-2 flex flex-col gap-4">
                 <div class="relative flex-1 rounded-lg bg-zinc-50 text-center px-4 pt-4">
