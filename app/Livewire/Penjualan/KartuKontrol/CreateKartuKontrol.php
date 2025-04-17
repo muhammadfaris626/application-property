@@ -75,12 +75,14 @@ class CreateKartuKontrol extends Component
             'jkk' => $this->jkk === true ? 1 : null,
             'listrik' => $this->listrik === true ? 1 : null,
             'bestek' => $this->bestek === true ? 1 : null,
+            'employee_id' => Auth::user()->employee_id,
+            'area_id' => Auth::user()->area_id
         ]);
 
         $this->dispatch(['resetDropdown']);
         $this->reset([
             'tanggal', 'customer_id', 'sbum', 'dp', 'imb',
-            'sertifikat', 'jkk', 'listrik', 'bestek'
+            'sertifikat', 'jkk', 'listrik', 'bestek', 'userSelected'
         ]);
 
         if ($this->action === 'save_and_add') {

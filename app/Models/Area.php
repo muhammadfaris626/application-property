@@ -47,4 +47,8 @@ class Area extends Model
     public function customers(): HasMany {
         return $this->hasMany(Customer::class);
     }
+
+    public function kartuKontrols(): HasMany {
+        return $this->hasMany(KartuKontrol::class);
+    }
 }

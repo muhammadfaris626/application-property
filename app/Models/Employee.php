@@ -68,4 +68,8 @@ class Employee extends Model
     public function pendapatans(): HasMany {
         return $this->hasMany(Pendapatan::class);
     }
+
+    public function kartuKontrols(): HasMany {
+        return $this->hasMany(KartuKontrol::class);
+    }
 }
