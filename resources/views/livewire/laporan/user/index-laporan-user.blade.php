@@ -38,43 +38,43 @@
                     <flux:custom.bar-chart :label="'bar-kas-kecil'" :data="$barChartPenjualanUser" :category="$categoryYears" :title="'Penjualan User (' . \Carbon\Carbon::now()->year - 2 . ' - ' . \Carbon\Carbon::now()->year . ')'" :useRupiah="false" />
                 </div>
             </div>
-            <div class="md:col-span-5">
-                <x-table>
-                    <x-table-heading>
-                        <x-table-heading-row>
-                            <x-table-heading-data>NO</x-table-heading-data>
-                            <x-table-heading-data>TANGGAL</x-table-heading-data>
-                            <x-table-heading-data>NOMOR BERKAS</x-table-heading-data>
-                            <x-table-heading-data>NIK</x-table-heading-data>
-                            <x-table-heading-data>NAMA</x-table-heading-data>
-                            <x-table-heading-data>ALAMAT</x-table-heading-data>
-                            <x-table-heading-data>WHATSAPP</x-table-heading-data>
-                            <x-table-heading-data>JENIS RUMAH</x-table-heading-data>
-                            <x-table-heading-data>KETERANGAN</x-table-heading-data>
-                            <x-table-heading-data>STATUS PENJUALAN</x-table-heading-data>
-                            <x-table-heading-data>STATUS PENGAJUAN</x-table-heading-data>
-                        </x-table-heading-row>
-                    </x-table-heading>
-                    <x-table-body>
-                        @foreach($fetchData as $key => $value)
-                            <x-table-body-row :class="$loop->last ? 'border-none' : 'border-b'">
-                                <x-table-body-data :class="'py-2 w-4'">{{ $key + 1 }}</x-table-body-data>
-                                <x-table-body-data>{{ $value->tanggal }}</x-table-body-data>
-                                <x-table-body-data>{{ $value->nomor_berkas }}</x-table-body-data>
-                                <x-table-body-data>{{ $value->prospectiveCustomer->identification_number }}</x-table-body-data>
-                                <x-table-body-data>{{ $value->prospectiveCustomer->name }}</x-table-body-data>
-                                <x-table-body-data>{{ $value->prospectiveCustomer->address }}</x-table-body-data>
-                                <x-table-body-data>{{ $value->prospectiveCustomer->whatsapp_number }}</x-table-body-data>
-                                <x-table-body-data>{{ $value->typeOfHouse->name }}</x-table-body-data>
-                                <x-table-body-data>{{ $value->keterangan_rumah }}</x-table-body-data>
-                                <x-table-body-data>{{ $value->status_penjualan }}</x-table-body-data>
-                                <x-table-body-data>{{ $value->status_pengajuan_user }}</x-table-body-data>
-                            </x-table-body-row>
-                        @endforeach
-                    </x-table-body>
-                </x-table>
-                <flux:pagination :paginator="$fetchData" />
-            </div>
         </div>
+    </div>
+    <div class="grid grid-cols-1 gap-4 mt-4">
+        <x-table>
+            <x-table-heading>
+                <x-table-heading-row>
+                    <x-table-heading-data>NO</x-table-heading-data>
+                    <x-table-heading-data>TANGGAL</x-table-heading-data>
+                    <x-table-heading-data>NOMOR BERKAS</x-table-heading-data>
+                    <x-table-heading-data>NIK</x-table-heading-data>
+                    <x-table-heading-data>NAMA</x-table-heading-data>
+                    <x-table-heading-data>ALAMAT</x-table-heading-data>
+                    <x-table-heading-data>WHATSAPP</x-table-heading-data>
+                    <x-table-heading-data>JENIS RUMAH</x-table-heading-data>
+                    <x-table-heading-data>KETERANGAN</x-table-heading-data>
+                    <x-table-heading-data>STATUS PENJUALAN</x-table-heading-data>
+                    <x-table-heading-data>STATUS PENGAJUAN</x-table-heading-data>
+                </x-table-heading-row>
+            </x-table-heading>
+            <x-table-body>
+                @foreach($fetchData as $key => $value)
+                    <x-table-body-row :class="$loop->last ? 'border-none' : 'border-b'">
+                        <x-table-body-data :class="'py-2 w-4'">{{ $key + 1 }}</x-table-body-data>
+                        <x-table-body-data>{{ $value->tanggal }}</x-table-body-data>
+                        <x-table-body-data>{{ $value->nomor_berkas }}</x-table-body-data>
+                        <x-table-body-data>{{ $value->prospectiveCustomer->identification_number }}</x-table-body-data>
+                        <x-table-body-data>{{ $value->prospectiveCustomer->name }}</x-table-body-data>
+                        <x-table-body-data>{{ $value->prospectiveCustomer->address }}</x-table-body-data>
+                        <x-table-body-data>{{ $value->prospectiveCustomer->whatsapp_number }}</x-table-body-data>
+                        <x-table-body-data>{{ $value->typeOfHouse->name }}</x-table-body-data>
+                        <x-table-body-data>{{ $value->keterangan_rumah }}</x-table-body-data>
+                        <x-table-body-data>{{ $value->status_penjualan }}</x-table-body-data>
+                        <x-table-body-data>{{ $value->status_pengajuan_user }}</x-table-body-data>
+                    </x-table-body-row>
+                @endforeach
+            </x-table-body>
+        </x-table>
+        <flux:pagination :paginator="$fetchData" />
     </div>
 </app>

@@ -23,6 +23,7 @@ class PermintaanMaterialFactory extends Factory
             'date' => $date,
             'ro_number' => 'RO-' . fake()->unique()->numerify('#######'),
             'employee_id' => 1,
+            'area_id' => 1,
             'created_at' => $date,
             'updated_at' => $date,
         ];

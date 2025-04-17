@@ -3,25 +3,32 @@
 namespace App\Livewire\Laporan\RequestOrder;
 
 use App\Models\Area;
+use App\Models\ListPermintaanMaterial;
+use App\Models\MaterialCategory;
 use App\Models\PermintaanMaterial;
 use Carbon\Carbon;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class LaporanRequestOrderIndex extends Component
 {
+    use WithPagination;
     public $search = "";
     public $startDate;
     public $endDate;
     public $area_id;
     public $categoryYears;
+    public $fetchArea;
 
     public function mount() {
         $this->startDate = now()->startOfYear()->toDateString();
         $this->endDate = now()->endOfYear()->toDateString();
         $this->area_id = 'all';
         $this->categoryYears = range(date('Y') - 2, date('Y'));
+        $this->fetchArea = Area::all();
     }
 
     public function render()
@@ -45,7 +52,12 @@ class LaporanRequestOrderIndex extends Component
 
     public function totalPermintaan() {
         return DB::table('permintaan_materials')
+            ->when($this->area_id !== 'all', function ($query) {
+                // Filter berdasarkan area_id dari permintaanMaterials
+                $query->where('area_id', $this->area_id);
+            })
             ->whereBetween('permintaan_materials.created_at', [$this->startDate, $this->endDate])
+
             ->count();
     }
 
@@ -77,10 +89,22 @@ class LaporanRequestOrderIndex extends Component
     }
 
     public function fetchData() {
-        $data = PermintaanMaterial::latest()
-            ->whereBetween('created_at', [$this->startDate, $this->endDate])
+        $data = ListPermintaanMaterial::select(
+                'material_categories.id',
+                'material_categories.name as nama',
+                DB::raw('SUM(list_permintaan_materials.approved_quantity) as jumlah_material'),
+                DB::raw('COUNT(DISTINCT list_permintaan_materials.permintaan_material_id) as jumlah_pengajuan')
+            )
+            ->join('materials', 'list_permintaan_materials.material_id', '=', 'materials.id')
+            ->join('material_categories', 'materials.material_category_id', '=', 'material_categories.id')
+            ->join('permintaan_materials', 'list_permintaan_materials.permintaan_material_id', '=', 'permintaan_materials.id') // Join tabel permintaanMaterials
+            ->whereBetween('list_permintaan_materials.created_at', [$this->startDate, $this->endDate])
+            ->when($this->area_id !== 'all', function ($query) {
+                // Filter berdasarkan area_id dari permintaanMaterials
+                $query->where('permintaan_materials.area_id', $this->area_id);
+            })
+            ->groupBy('material_categories.id', 'material_categories.name')
             ->paginate(20);
         return $data;
     }
-
 }

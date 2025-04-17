@@ -6,9 +6,11 @@ use App\Models\Customer;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class IndexLaporanUser extends Component
 {
+    use WithPagination;
     public $search = "";
     public $startDate;
     public $endDate;

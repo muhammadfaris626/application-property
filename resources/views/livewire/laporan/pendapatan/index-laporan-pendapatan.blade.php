@@ -25,33 +25,33 @@
                     <flux:custom.column-chart-basic :data="$columnChartPendapatan" :title="'Total Pendapatan'" :label="'chart-pendapatan'" :useRupiah="true" />
                 </div>
             </div>
-            <div class="md:col-span-3">
-                <x-table>
-                    <x-table-heading>
-                        <x-table-heading-row>
-                            <x-table-heading-data>NO</x-table-heading-data>
-                            <x-table-heading-data>TANGGAL</x-table-heading-data>
-                            <x-table-heading-data>JENIS PEMASUKAN</x-table-heading-data>
-                            <x-table-heading-data>KETERANGAN</x-table-heading-data>
-                            <x-table-heading-data>TOTAL TOTAL</x-table-heading-data>
-                        </x-table-heading-row>
-                    </x-table-heading>
-                    <x-table-body>
-                        @foreach($fetchData as $key => $value)
-                            <x-table-body-row :class="$loop->last ? 'border-none' : 'border-b'">
-                                <x-table-body-data :class="'py-2 w-4'">{{ $key + 1 }}</x-table-body-data>
-                                <x-table-body-data>{{ $value->tanggal }}</x-table-body-data>
-                                <x-table-body-data>{{ $value->typeOfIncome->name }}</x-table-body-data>
-                                <x-table-body-data>{{ $value->keterangan }}</x-table-body-data>
-                                <x-table-body-data>
-                                    {{ 'Rp. ' . number_format($value->total, 0, ',', '.') }}
-                                </x-table-body-data>
-                            </x-table-body-row>
-                        @endforeach
-                    </x-table-body>
-                </x-table>
-                <flux:pagination :paginator="$fetchData" />
-            </div>
         </div>
+    </div>
+    <div class="grid grid-cols-1 gap-4 mt-4">
+        <x-table>
+            <x-table-heading>
+                <x-table-heading-row>
+                    <x-table-heading-data>NO</x-table-heading-data>
+                    <x-table-heading-data>TANGGAL</x-table-heading-data>
+                    <x-table-heading-data>JENIS PEMASUKAN</x-table-heading-data>
+                    <x-table-heading-data>KETERANGAN</x-table-heading-data>
+                    <x-table-heading-data>TOTAL TOTAL</x-table-heading-data>
+                </x-table-heading-row>
+            </x-table-heading>
+            <x-table-body>
+                @foreach($fetchData as $key => $value)
+                    <x-table-body-row :class="$loop->last ? 'border-none' : 'border-b'">
+                        <x-table-body-data :class="'py-2 w-4'">{{ $key + 1 }}</x-table-body-data>
+                        <x-table-body-data>{{ $value->tanggal }}</x-table-body-data>
+                        <x-table-body-data>{{ $value->typeOfIncome->name }}</x-table-body-data>
+                        <x-table-body-data>{{ $value->keterangan }}</x-table-body-data>
+                        <x-table-body-data>
+                            {{ 'Rp. ' . number_format($value->total, 0, ',', '.') }}
+                        </x-table-body-data>
+                    </x-table-body-row>
+                @endforeach
+            </x-table-body>
+        </x-table>
+        <flux:pagination :paginator="$fetchData" />
     </div>
 </app>

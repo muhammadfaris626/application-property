@@ -6,6 +6,12 @@
             <flux:breadcrumbs.item divider="slash">Permintaan Material</flux:breadcrumbs.item>
         </flux:breadcrumbs>
         <div class="flex flex-col md:flex-row gap-4">
+            <flux:select size="sm" wire:model="area_id" placeholder="Pilih Area">
+                <flux:select.option value="all">Semua Area</flux:select.option>
+                @foreach($fetchArea as $key => $value)
+                    <flux:select.option value="{{ $value->id }}">{{ $value->name }}</flux:select.option>
+                @endforeach
+            </flux:select>
             <flux:input type="date" size="sm" x-data x-ref="datepicker1" @click="$refs.datepicker1.showPicker()" wire:model="startDate" />
             <flux:input type="date" size="sm" x-data x-ref="datepicker2" @click="$refs.datepicker2.showPicker()" wire:model="endDate" />
             <flux:button variant="primary" size="sm" wire:click="filterData">Filter</flux:button>
@@ -25,28 +31,29 @@
                     <flux:custom.column-chart-basic :data="$columnChartPermintaan" :title="'Total Permintaan'" :label="'permintaan'" :useRupiah="false" />
                 </div>
             </div>
-            <div class="md:col-span-3">
-                <x-table>
-                    <x-table-heading>
-                        <x-table-heading-row>
-                            <x-table-heading-data>NO</x-table-heading-data>
-                            <x-table-heading-data>TANGGAL</x-table-heading-data>
-                            <x-table-heading-data>NOMOR RO</x-table-heading-data>
-                            <x-table-heading-data>YANG MENGAJUKAN</x-table-heading-data>
-                        </x-table-heading-row>
-                    </x-table-heading>
-                    <x-table-body>
-                        @foreach($fetchData as $key => $value)
-                        <x-table-body-row :class="$loop->last ? 'border-none' : 'border-b'">
-                            <x-table-body-data :class="'py-2 w-4'">{{ $key + 1 }}</x-table-body-data>
-                            <x-table-body-data>{{ $value->date }}</x-table-body-data>
-                            <x-table-body-data>{{ $value->ro_number }}</x-table-body-data>
-                            <x-table-body-data>{{ $value->employee->name }}</x-table-body-data>
-                        </x-table-body-row>
-                        @endforeach
-                    </x-table-body>
-                </x-table>
-            </div>
         </div>
+    </div>
+    <div class="grid grid-cols-1 mt-4 gap-4">
+        <x-table>
+            <x-table-heading>
+                <x-table-heading-row>
+                    <x-table-heading-data>NO</x-table-heading-data>
+                    <x-table-heading-data>KATEGORI MATERIAL</x-table-heading-data>
+                    <x-table-heading-data>JUMLAH MATERIAL</x-table-heading-data>
+                    <x-table-heading-data>JUMLAH PENGAJUAN</x-table-heading-data>
+                </x-table-heading-row>
+            </x-table-heading>
+            <x-table-body>
+                @foreach($fetchData as $key => $value)
+                    <x-table-body-row :class="$loop->last ? 'border-none' : 'border-b'">
+                        <x-table-body-data :class="'py-2 w-4'">{{ $key + 1 }}</x-table-body-data>
+                        <x-table-body-data>{{ $value->nama }}</x-table-body-data>
+                        <x-table-body-data>{{ $value->jumlah_material }}</x-table-body-data>
+                        <x-table-body-data>{{ $value->jumlah_pengajuan }}</x-table-body-data>
+                    </x-table-body-row>
+                @endforeach
+            </x-table-body>
+        </x-table>
+        <flux:pagination :paginator="$fetchData" />
     </div>
 </app>

@@ -7,9 +7,11 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class LaporanKasBesarIndex extends Component
 {
+    use WithPagination;
     public $search = "";
     public $startDate;
     public $endDate;
