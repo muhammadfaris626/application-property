@@ -43,4 +43,8 @@ class Area extends Model
     public function permintaanMaterials(): HasMany {
         return $this->hasMany(PermintaanMaterial::class);
     }
+
+    public function customers(): HasMany {
+        return $this->hasMany(Customer::class);
+    }
 }

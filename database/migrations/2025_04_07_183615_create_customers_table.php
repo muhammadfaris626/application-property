@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('status_penjualan');
             $table->string('status_pengajuan_user');
             $table->integer('verifikasi_dp')->nullable();
-            $table->string('upload_berkas');
+            $table->string('upload_berkas')->nullable();
             $table->foreignId('employee_id')->constrained('employees')->cascadeOnDelete();
             $table->timestamps();
         });

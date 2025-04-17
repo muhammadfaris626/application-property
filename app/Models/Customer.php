@@ -12,7 +12,7 @@ class Customer extends Model
     /** @use HasFactory<\Database\Factories\CustomerFactory> */
     use HasFactory;
 
-    protected $fillable = ['tanggal', 'nomor_berkas', 'prospective_customer_id', 'type_of_house_id', 'keterangan_rumah', 'status_penjualan', 'status_pengajuan_user', 'verifikasi_dp', 'upload_berkas', 'employee_id'];
+    protected $fillable = ['tanggal', 'nomor_berkas', 'prospective_customer_id', 'type_of_house_id', 'keterangan_rumah', 'status_penjualan', 'status_pengajuan_user', 'verifikasi_dp', 'upload_berkas', 'employee_id', 'area_id'];
 
     public function prospectiveCustomer(): BelongsTo {
         return $this->belongsTo(ProspectiveCustomer::class, 'prospective_customer_id');
@@ -24,6 +24,10 @@ class Customer extends Model
 
     public function employee(): BelongsTo {
         return $this->belongsTo(Employee::class, 'employee_id');
+    }
+
+    public function area(): BelongsTo {
+        return $this->belongsTo(Area::class, 'area_id');
     }
 
     public function kartuKontrols(): HasMany {

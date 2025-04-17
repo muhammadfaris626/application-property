@@ -74,16 +74,21 @@ class CreateUser extends Component
             return back();
         }
 
-        $this->validate([
-            'upload_berkas' => 'file|mimes:pdf|max:2048',
-        ], [
-            'upload_berkas.required' => 'Kolom upload berkas wajib diisi.',
-            'upload_berkas.mimes' => 'File berkas harus dalam format PDF.',
-            'upload_berkas.max' => 'Ukuran file tidak boleh lebih dari 2MB.',
-        ]);
+        // $this->validate([
+        //     'upload_berkas' => 'mimes:pdf|max:2048',
+        // ], [
+        //     'upload_berkas.required' => 'Kolom upload berkas wajib diisi.',
+        //     'upload_berkas.mimes' => 'File berkas harus dalam format PDF.',
+        //     'upload_berkas.max' => 'Ukuran file tidak boleh lebih dari 2MB.',
+        // ]);
 
-        $filename = 'berkas_' . now()->format('Ymd_His') . '.' . $this->upload_berkas->getClientOriginalExtension();
-        $filePath = $this->upload_berkas->storeAs('berkas-customer', $filename, 'public');
+        $filename = null;
+        $filePath = null;
+
+        if ($this->upload_berkas) {
+            $filename = 'berkas_' . now()->format('Ymd_His') . '.' . $this->upload_berkas->getClientOriginalExtension();
+            $filePath = $this->upload_berkas->storeAs('berkas-customer', $filename, 'public');
+        }
 
         Customer::create([
             'tanggal' => $this->tanggal,
@@ -94,15 +99,16 @@ class CreateUser extends Component
             'status_penjualan' => $this->status_penjualan,
             'status_pengajuan_user' => $this->status_pengajuan_user,
             'verifikasi_dp' => $this->verifikasi_dp === true ? 1 : null,
-            'upload_berkas' => $filePath,
-            'employee_id' => Auth::user()->employee_id
+            'upload_berkas' => $filePath, // ini bisa null kalau gak upload
+            'employee_id' => Auth::user()->employee_id,
+            'area_id' => Auth::user()->area_id,
         ]);
 
         $this->dispatch(['resetDropdown']);
         $this->reset([
             'tanggal', 'nomor_berkas', 'prospective_customer_id', 'type_of_house_id',
             'status_penjualan', 'status_pengajuan_user', 'verifikasi_dp',
-            'upload_berkas'
+            'upload_berkas', 'userSelected'
         ]);
 
         if ($this->action === 'save_and_add') {
