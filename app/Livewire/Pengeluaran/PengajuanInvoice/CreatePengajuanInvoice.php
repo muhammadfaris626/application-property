@@ -11,6 +11,7 @@ use App\Models\Position;
 use App\Models\Structure;
 use App\Models\User;
 use App\Notifications\PengajuanInvoiceNotification;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 use Livewire\Component;
@@ -39,9 +40,14 @@ class CreatePengajuanInvoice extends Component
     public function store() {
         $request = new PengajuanInvoiceRequest();
         $this->validate($request->rules(), $request->messages());
+        if (empty(Auth::user()?->employee_id)) {
+            LivewireAlert::text('Anda tidak punya akses untuk tambah data.')->error()->toast()->position('top-end')->show();
+            return back();
+        }
         $create = PengajuanInvoice::create([
             'date' => $this->date,
-            'employee_id' => $this->employee_id,
+            'employee_id' => Auth::user()->employee_id,
+            'area_id' => Auth::user()->area_id,
             'price' => str_replace('.', '', $this->price),
             'desc' => $this->desc
         ]);

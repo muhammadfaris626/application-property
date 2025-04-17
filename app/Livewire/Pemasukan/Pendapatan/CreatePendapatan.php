@@ -56,7 +56,8 @@ class CreatePendapatan extends Component
             'customer_id' => $this->customer_id,
             'keterangan' => $this->keterangan,
             'total' => str_replace('.', '', $this->total),
-            'employee_id' => Auth::user()->employee_id
+            'employee_id' => Auth::user()->employee_id,
+            'area_id' => Auth::user()->area_id,
         ]);
 
         $this->dispatch(['resetDropdown']);

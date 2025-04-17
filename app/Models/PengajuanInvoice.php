@@ -12,10 +12,14 @@ class PengajuanInvoice extends Model
     /** @use HasFactory<\Database\Factories\PengajuanInvoiceFactory> */
     use HasFactory;
 
-    protected $fillable = ['date', 'employee_id', 'price', 'desc', 'approved_price', 'status'];
+    protected $fillable = ['date', 'employee_id', 'area_id', 'price', 'desc', 'approved_price', 'status'];
 
     public function employee(): BelongsTo {
         return $this->belongsTo(Employee::class, 'employee_id');
+    }
+
+    public function area(): BelongsTo {
+        return $this->belongsTo(Area::class, 'area_id');
     }
 
     public function approvalHistories(): MorphMany {

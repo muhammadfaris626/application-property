@@ -51,4 +51,12 @@ class Area extends Model
     public function kartuKontrols(): HasMany {
         return $this->hasMany(KartuKontrol::class);
     }
+
+    public function pendapatans(): HasMany {
+        return $this->hasMany(Pendapatan::class);
+    }
+
+    public function pengajuanInvoices(): HasMany {
+        return $this->hasMany(PengajuanInvoice::class);
+    }
 }

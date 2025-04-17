@@ -10,7 +10,7 @@ class Pendapatan extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['tanggal', 'type_of_income_id', 'customer_id', 'keterangan', 'total', 'employee_id'];
+    protected $fillable = ['tanggal', 'type_of_income_id', 'customer_id', 'keterangan', 'total', 'employee_id', 'area_id'];
 
     public function typeOfIncome(): BelongsTo {
         return $this->belongsTo(TypeOfIncome::class, 'type_of_income_id');
@@ -22,5 +22,9 @@ class Pendapatan extends Model
 
     public function employee(): BelongsTo {
         return $this->belongsTo(Employee::class, 'employee_id');
+    }
+
+    public function area(): BelongsTo {
+        return $this->belongsTo(Area::class, 'area_id');
     }
 }

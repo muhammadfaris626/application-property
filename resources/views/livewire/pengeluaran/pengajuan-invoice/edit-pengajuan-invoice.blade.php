@@ -14,13 +14,13 @@
                     <div>
                         <flux:input type="date" wire:model="date" label="Tanggal" badge="Required" x-data x-ref="datepicker" @click="$refs.datepicker.showPicker()" />
                     </div>
-                    <div>
+                    {{-- <div>
                         <flux:field>
                             <flux:label badge="Required">Penanggung Jawab</flux:label>
                             <flux:select wire:model="employee_id" variant="listbox" placeholder="Pilih Karyawan" :options="$fetchKaryawan" :selectedData="$employee_id" />
                             <flux:error name="employee_id" />
                         </flux:field>
-                    </div>
+                    </div> --}}
                     <div x-data="{ price: @entangle('price').live }" x-init="price = price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')">
                         <flux:input.group label="Harga" badge="Required">
                             <flux:input.group.prefix>Rp</flux:input.group.prefix>
