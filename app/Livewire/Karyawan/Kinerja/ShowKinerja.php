@@ -3,81 +3,114 @@
 namespace App\Livewire\Karyawan\Kinerja;
 
 use App\Models\ProspectiveCustomer;
+use App\Models\Structure;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class ShowKinerja extends Component
 {
-    public $id, $employee_id;
+    public $id, $employee_id, $data;
+    public $startDate;
+    public $endDate;
 
     public function mount($id) {
         $this->id = $id;
-        $data = ProspectiveCustomer::findOrFail($id);
-        $this->employee_id = $data->employee_id;
+        $this->data = Structure::findOrFail($id);
+        $this->employee_id = $this->data->employee_id;
+        $this->startDate = now()->startOfYear()->toDateString();
+        $this->endDate = now()->endOfYear()->toDateString();
     }
     public function render()
     {
         return view('livewire.karyawan.kinerja.show-kinerja', [
-            'totalHarian' => $this->totalHarian(),
-            'totalMingguan' => $this->totalMingguan(),
-            'totalBulanan' => $this->totalBulanan(),
+            'totalCalonUser' => $this->totalCalonUser(),
+            'totalUser' => $this->totalUser(),
+            'totalKartuKontrol' => $this->totalKartuKontrol(),
             'columnChartKinerja' => $this->columnChartKinerja()
         ]);
     }
 
-    public function totalHarian() {
+    public function filterData()
+    {
+        // Jika salah satu tanggal kosong, tetap gunakan default
+        $this->startDate = $this->startDate ?: now()->startOfYear()->toDateString();
+        $this->endDate = $this->endDate ?: now()->endOfYear()->toDateString();
+    }
+
+    public function totalCalonUser() {
         return DB::table('prospective_customers')
             ->where('employee_id', $this->employee_id)
-            ->whereDate('created_at', Carbon::today())
+            ->whereBetween('created_at', [$this->startDate, $this->endDate])
             ->count();
     }
 
-    public function totalMingguan() {
-        $startOfWeek = Carbon::now()->startOfWeek(); // Mulai dari Senin
-        $endOfWeek = Carbon::now()->endOfWeek();     // Sampai Minggu
-
-        return DB::table('prospective_customers')
+    public function totalUser() {
+        return DB::table('customers')
             ->where('employee_id', $this->employee_id)
-            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+            ->whereBetween('created_at', [$this->startDate, $this->endDate])
             ->count();
     }
 
-    public function totalBulanan() {
-        $startOfMonth = Carbon::now()->startOfMonth();
-        $endOfMonth = Carbon::now()->endOfMonth();
-
-        return DB::table('prospective_customers')
+    public function totalKartuKontrol() {
+        return DB::table('kartu_kontrols')
             ->where('employee_id', $this->employee_id)
-            ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+            ->whereBetween('created_at', [$this->startDate, $this->endDate])
             ->count();
     }
 
     public function columnChartKinerja() {
-        $currentYear = Carbon::now()->year;
-        $years = [$currentYear - 2, $currentYear - 1, $currentYear];
-
-        $monthlyTotals = collect(DB::table('prospective_customers')
-            ->select(
-                DB::raw('YEAR(created_at) as year'),
-                DB::raw('MONTH(created_at) as month'),
-                DB::raw('COUNT(*) as total_price')
-            )
+        // Ambil total per bulan dari prospective_customers
+        $prospective = DB::table('prospective_customers')
+            ->select(DB::raw('MONTH(created_at) as month'), DB::raw('COUNT(*) as total'))
             ->where('employee_id', $this->employee_id)
-            ->whereIn(DB::raw('YEAR(created_at)'), $years)
-            ->groupBy(DB::raw('YEAR(created_at)'), DB::raw('MONTH(created_at)'))
-            ->orderBy(DB::raw('YEAR(created_at)'), 'asc')
+            ->whereBetween('created_at', [$this->startDate, $this->endDate])
+            ->groupBy(DB::raw('MONTH(created_at)'))
             ->orderBy(DB::raw('MONTH(created_at)'))
-            ->get());
+            ->get();
 
-        return collect($years)->map(function ($year) use ($monthlyTotals) {
-            return [
-                'name' => (string) $year,
-                'data' => collect(range(1, 12))->map(function ($month) use ($monthlyTotals, $year) {
-                    $total = $monthlyTotals->where('year', $year)->where('month', $month)->first();
-                    return $total ? $total->total_price : 0;
-                })->toArray()
-            ];
-        })->toArray();
+        // Ambil total per bulan dari customers
+        $customers = DB::table('customers')
+            ->select(DB::raw('MONTH(created_at) as month'), DB::raw('COUNT(*) as total'))
+            ->where('employee_id', $this->employee_id)
+            ->whereBetween('created_at', [$this->startDate, $this->endDate])
+            ->groupBy(DB::raw('MONTH(created_at)'))
+            ->orderBy(DB::raw('MONTH(created_at)'))
+            ->get();
+
+        // Ambil total per bulan dari kartu_kontrols
+        $kontrols = DB::table('kartu_kontrols')
+            ->select(DB::raw('MONTH(created_at) as month'), DB::raw('COUNT(*) as total'))
+            ->where('employee_id', $this->employee_id)
+            ->whereBetween('created_at', [$this->startDate, $this->endDate])
+            ->groupBy(DB::raw('MONTH(created_at)'))
+            ->orderBy(DB::raw('MONTH(created_at)'))
+            ->get();
+
+        // Generate data per bulan dari 1 sampai 12
+        $monthlyTotals = function ($data) {
+            return collect(range(1, 12))->map(function ($month) use ($data) {
+                $record = $data->firstWhere('month', $month);
+                return $record ? $record->total : 0;
+            })->toArray();
+        };
+
+        // Hasil akhir untuk chart
+        return [
+            [
+                'name' => 'Calon User',
+                'data' => $monthlyTotals($prospective)
+            ],
+            [
+                'name' => 'User',
+                'data' => $monthlyTotals($customers)
+            ],
+            [
+                'name' => 'Kartu Kontrol',
+                'data' => $monthlyTotals($kontrols)
+            ]
+        ];
     }
+
+
 }

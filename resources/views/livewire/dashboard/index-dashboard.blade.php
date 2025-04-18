@@ -60,11 +60,11 @@
                 <flux:heading size="xl">Rp {{ number_format($this->totalPemasukan('kas-kecil'), 0, ',', '.') }}</flux:heading>
             </div>
             <div class="relative rounded-lg p-4 bg-zinc-50 dark:bg-zinc-700">
-                <flux:subheading>Total Pengeluaran Kas Besar</flux:subheading>
+                <flux:subheading>Total Pengeluaran Kas Kecil</flux:subheading>
                 <flux:heading size="xl">Rp {{ number_format($this->totalPengeluaran('kas-besar'), 0, ',', '.') }}</flux:heading>
             </div>
             <div class="relative rounded-lg p-4 bg-zinc-50 dark:bg-zinc-700">
-                <flux:subheading>Total Pengeluaran Kas Besar</flux:subheading>
+                <flux:subheading>Total Pengeluaran Kas Kecil</flux:subheading>
                 <flux:heading size="xl">Rp {{ number_format($this->totalPengeluaran('kas-kecil'), 0, ',', '.') }}</flux:heading>
             </div>
         </div>
