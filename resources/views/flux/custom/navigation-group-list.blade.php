@@ -4,20 +4,22 @@
 @php
 $firstKey = array_key_first($konfigurasi);
 $groupMenus = $konfigurasi[$firstKey];
-    $hasAccess = function ($item) {
-        if (!is_array($item) || !array_key_exists('permission', $item)) return false;
-        $permissions = is_array($item['permission']) ? $item['permission'] : [$item['permission']];
-        return collect($permissions)->contains(function ($perm) {
-            return auth()->user()->can($perm);
-        });
-    };
-    $filteredMenus = collect($groupMenus)->filter(function ($menu) use ($hasAccess) {
-        if (is_array($menu) && array_is_list($menu)) {
-            // Nested submenu
-            return collect($menu)->filter(fn($item) => $hasAccess($item))->isNotEmpty();
-        }
-        return $hasAccess($menu);
+$hasAccess = function ($item) {
+    if (!is_array($item) || !array_key_exists('permission', $item)) return false;
+    $permissions = is_array($item['permission']) ? $item['permission'] : [$item['permission']];
+    return collect($permissions)->contains(function ($perm) {
+        return auth()->user()->can($perm);
     });
+};
+
+$filteredMenus = collect($groupMenus)->filter(function ($menu) use ($hasAccess) {
+
+    if (is_array($menu) && array_is_list($menu)) {
+        // Nested submenu
+        return collect($menu)->filter(fn($item) => $hasAccess($item))->isNotEmpty();
+    }
+    return $hasAccess($menu);
+});
 @endphp
 
 @if($filteredMenus->isNotEmpty())
